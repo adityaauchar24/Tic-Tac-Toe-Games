@@ -1,157 +1,131 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState, type MouseEvent } from "react";
 
 let data = ["", "", "", "", "", "", "", "", ""];
 
 const TicTacToe = () => {
-  let [count, setCount] = useState(0);
-  let [lock, setLock] = useState(false);
-  let titleRef = useRef(null);
+  const [count, setCount] = useState(0);
+  const [lock, setLock] = useState(false);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
-  let box1 = useRef(null);
-  let box2 = useRef(null);
-  let box3 = useRef(null);
-  let box4 = useRef(null);
-  let box5 = useRef(null);
-  let box6 = useRef(null);
-  let box7 = useRef(null);
-  let box8 = useRef(null);
-  let box9 = useRef(null);
+  const box1 = useRef<HTMLDivElement>(null);
+  const box2 = useRef<HTMLDivElement>(null);
+  const box3 = useRef<HTMLDivElement>(null);
+  const box4 = useRef<HTMLDivElement>(null);
+  const box5 = useRef<HTMLDivElement>(null);
+  const box6 = useRef<HTMLDivElement>(null);
+  const box7 = useRef<HTMLDivElement>(null);
+  const box8 = useRef<HTMLDivElement>(null);
+  const box9 = useRef<HTMLDivElement>(null);
 
-  let boxArray = [box1, box2, box3, box4, box5, box6, box7, box8, box9];
+  const boxArray = [box1, box2, box3, box4, box5, box6, box7, box8, box9];
 
-  const toggle = (e, num) => {
-    if (lock) return 0;
+  const toggle = (e: MouseEvent<HTMLDivElement>, num: number) => {
+    if (lock || data[num] !== "") return;
+    
+    const target = e.currentTarget as HTMLDivElement;
+    
     if (count % 2 === 0) {
-      e.target.innerHTML = "X";
+      target.textContent = "X";
       data[num] = "x";
-      setCount(++count);
+      setCount(count + 1);
     } else {
-      e.target.innerHTML = "O";
+      target.textContent = "O";
       data[num] = "o";
-      setCount(++count);
+      setCount(count + 1);
     }
-
     checkWin();
   };
 
   const checkWin = () => {
-    if (data[0] === data[1] && data[1] === data[2] && data[2] !== "") {
-      won(data[2]);
-    } else if (data[3] === data[4] && data[4] === data[5] && data[5] !== "") {
-      won(data[5]);
-    } else if (data[6] === data[7] && data[7] === data[8] && data[8] !== "") {
-      won(data[8]);
-    } else if (data[0] === data[3] && data[3] === data[6] && data[6] !== "") {
-      won(data[6]);
-    } else if (data[1] === data[4] && data[4] === data[7] && data[7] !== "") {
-      won(data[7]);
-    } else if (data[2] === data[5] && data[5] === data[8] && data[8] !== "") {
-      won(data[8]);
-    } else if (data[0] === data[4] && data[4] === data[8] && data[8] !== "") {
-      won(data[8]);
-    } else if (data[2] === data[4] && data[4] === data[6] && data[6] !== "") {
-      won(data[6]);
+    const winningCombinations = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+      [0, 4, 8], [2, 4, 6] // diagonals
+    ];
+
+    for (const combination of winningCombinations) {
+      const [a, b, c] = combination;
+      if (data[a] && data[a] === data[b] && data[a] === data[c]) {
+        won(data[a]);
+        return;
+      }
+    }
+
+    // Check for draw
+    if (count === 8 && !lock) {
+      if (titleRef.current) {
+        titleRef.current.innerHTML = "Game Draw!";
+      }
+      setLock(true);
     }
   };
 
-  const won = (winner) => {
+  const won = (winner: string) => {
     setLock(true);
-    if (winner === "x") {
-      titleRef.current.innerHTML = `Congratulations : X Wins`;
-    } else {
-      titleRef.current.innerHTML = `Congratulations : O Wins`;
+    if (titleRef.current) {
+      titleRef.current.innerHTML = `Congratulations: <span style="color: #26ffcb">${winner.toUpperCase()}</span> Wins!`;
     }
   };
 
   const reset = () => {
     setLock(false);
+    setCount(0);
     data = ["", "", "", "", "", "", "", "", ""];
-    titleRef.current.innerHTML = "Tic Tac Toe In <span> React </span>";
-    boxArray.map((elem) => {
-      elem.current.innerHTML = "";
+    
+    if (titleRef.current) {
+      titleRef.current.innerHTML = 'Tic Tac Toe Game <span style="color: #26ffcb">Using React js</span>';
+    }
+    
+    boxArray.forEach((elem) => {
+      if (elem.current) {
+        elem.current.textContent = "";
+      }
     });
   };
 
   return (
     <div className="container">
-      <h1 className="title" ref={titleRef}>
-        Tic Tac Toe Game{" "}
-        <span style={{ color: "#26ffcb" }}> Using React js</span>
-      </h1>
+      <h1 
+        className="title" 
+        ref={titleRef}
+        dangerouslySetInnerHTML={{
+          __html: 'Tic Tac Toe Game <span style="color: #26ffcb">Using React js</span>'
+        }}
+      />
       <div className="board">
         <div className="row1">
-          <div
-            className="boxes"
-            onClick={(e) => {
-              toggle(e, 0);
-            }}
-            ref={box1}
-          ></div>
-          <div
-            className="boxes"
-            onClick={(e) => {
-              toggle(e, 1);
-            }}
-            ref={box2}
-          ></div>
-          <div
-            className="boxes"
-            onClick={(e) => {
-              toggle(e, 2);
-            }}
-            ref={box3}
-          ></div>
+          {[0, 1, 2].map((index) => (
+            <div
+              key={index}
+              className="boxes"
+              onClick={(e) => toggle(e, index)}
+              ref={boxArray[index]}
+            />
+          ))}
         </div>
         <div className="row2">
-          <div
-            className="boxes"
-            onClick={(e) => {
-              toggle(e, 3);
-            }}
-            ref={box4}
-          ></div>
-          <div
-            className="boxes"
-            onClick={(e) => {
-              toggle(e, 4);
-            }}
-            ref={box5}
-          ></div>
-          <div
-            className="boxes"
-            onClick={(e) => {
-              toggle(e, 5);
-            }}
-            ref={box6}
-          ></div>
+          {[3, 4, 5].map((index) => (
+            <div
+              key={index}
+              className="boxes"
+              onClick={(e) => toggle(e, index)}
+              ref={boxArray[index]}
+            />
+          ))}
         </div>
         <div className="row3">
-          <div
-            className="boxes"
-            onClick={(e) => {
-              toggle(e, 6);
-            }}
-            ref={box7}
-          ></div>
-          <div
-            className="boxes"
-            onClick={(e) => {
-              toggle(e, 7);
-            }}
-            ref={box8}
-          ></div>
-          <div
-            className="boxes"
-            onClick={(e) => {
-              toggle(e, 8);
-            }}
-            ref={box9}
-          ></div>
+          {[6, 7, 8].map((index) => (
+            <div
+              key={index}
+              className="boxes"
+              onClick={(e) => toggle(e, index)}
+              ref={boxArray[index]}
+            />
+          ))}
         </div>
       </div>
-      <button className="reset" onClick={() => reset()}>
-        {" "}
-        Reset{" "}
+      <button className="reset" onClick={reset}>
+        Reset
       </button>
     </div>
   );
