@@ -1,129 +1,198 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-  background: linear-gradient(135deg, #1a1a2e, #16213e);
+/* App.tsx styles */
+.app-container {
   min-height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
+  flex-direction: column;
+  position: relative;
 }
 
-.container {
+.debug-info {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: #26ffcb;
+  z-index: 1000;
+}
+
+.app-title {
   text-align: center;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  max-width: 600px;
-  width: 90%;
+  margin: 20px 0;
+  color: #fff;
 }
 
-.title {
-  font-size: 2.8rem;
-  margin-bottom: 2rem;
-  background: linear-gradient(45deg, #00dbde, #fc00ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  font-weight: 700;
+.app-footer {
+  text-align: center;
+  margin-top: auto;
+  padding: 20px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
 }
 
-.title span {
-  background: linear-gradient(45deg, #26ffcb, #00a8ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.env-info {
+  margin-top: 5px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
 }
 
-.board {
-  display: inline-block;
-  margin: 2rem 0;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
-}
-
-.row1, .row2, .row3 {
-  display: flex;
-}
-
-.boxes {
-  width: 100px;
-  height: 100px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  margin: 5px;
-  border-radius: 10px;
+/* TicTacToe.tsx additional styles */
+.player-info {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 3.5rem;
+  gap: 20px;
+  margin: 20px 0;
+  font-size: 1.2rem;
+}
+
+.player-x,
+.player-o {
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.player-x.active {
+  background: rgba(0, 219, 222, 0.3);
+  box-shadow: 0 0 15px rgba(0, 219, 222, 0.5);
+}
+
+.player-o.active {
+  background: rgba(252, 0, 255, 0.3);
+  box-shadow: 0 0 15px rgba(252, 0, 255, 0.5);
+}
+
+.vs {
+  font-weight: bold;
+  color: #fff;
+}
+
+.game-stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 15px 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: white;
-}
-
-.boxes:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: scale(1.05);
-  border-color: #26ffcb;
-}
-
-.boxes.x {
-  color: #00dbde;
-  text-shadow: 0 0 10px #00dbde;
-}
-
-.boxes.o {
-  color: #fc00ff;
-  text-shadow: 0 0 10px #fc00ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .reset {
-  margin-top: 2rem;
-  padding: 1rem 2.5rem;
-  font-size: 1.2rem;
-  background: linear-gradient(45deg, #00dbde, #fc00ff);
-  border: none;
-  border-radius: 50px;
+  background: linear-gradient(45deg, #ff6b6b, #ff8e53);
   color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
-.reset:hover {
+.undo {
+  background: linear-gradient(45deg, #4ecdc4, #44a08d);
+  color: white;
+}
+
+.history {
+  background: linear-gradient(45deg, #556270, #4ecdc4);
+  color: white;
+}
+
+.btn:hover:not(:disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 5px 20px rgba(0, 219, 222, 0.4);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.reset:active {
-  transform: translateY(-1px);
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-@media (max-width: 600px) {
-  .title {
-    font-size: 2rem;
+.config-info {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+.config-info span {
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+/* Winning box animation */
+.winning-box {
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 0 20px #26ffcb !important;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
   }
-  
-  .boxes {
-    width: 80px;
-    height: 80px;
-    font-size: 2.5rem;
+  50% {
+    transform: scale(1.05);
   }
-  
-  .container {
-    padding: 1.5rem;
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Box animations if enabled */
+.boxes.animated {
+  transition: all 0.3s ease;
+}
+
+.boxes.x {
+  color: #00dbde !important;
+  text-shadow: 0 0 15px #00dbde !important;
+}
+
+.boxes.o {
+  color: #fc00ff !important;
+  text-shadow: 0 0 15px #fc00ff !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .player-info {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 80%;
+  }
+
+  .game-stats {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
   }
 }
